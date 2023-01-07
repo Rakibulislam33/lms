@@ -69,6 +69,7 @@ class DatabaseSeeder extends Seeder
             $role->givePermissionTo('lead-management');
         }
 
+
         $user->assignRole($role);
 
         return $user;
