@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Course;
 use App\Models\Curriculum;
+use App\Models\User;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -14,12 +15,25 @@ use Livewire\Component;
 class CourseCreate extends Component
 {
 
-public $name;
+    public $name;
+    public $course_image;
     public $description;
     public $price;
     public $selectedDays = [];
+    public $selectedTeachers = [];
     public $time;
     public $end_date;
+
+    // public $course_name;
+    // public $course_image;
+    // public $price;
+    // public $description;
+    // public $selectedDays = [];
+    // public $selectedTeachers = [];
+    // public $duration;
+    // public $end_date;
+
+
 
     public $days = [
         'Sunday',
@@ -31,21 +45,34 @@ public $name;
         'Saturday'
     ];
 
+
+
+
     protected $rules = [
         'name' => 'required|unique:courses,name',
         'description' => 'required',
         'price' => 'required',
+        'course_image'=> 'required',
     ];
 
 
     public function formSubmit() {
         $this->validate();
-        $course = Course::create([
-            'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price,
-            'user_id' => Auth::user()->id
-        ]);
+        // $course = Course::create([
+        //     'name' => $this->name,
+        //     'image' => $this->course_image,
+        //     'description' => $this->description,
+        //     'price' => $this->price,
+        //     'user_id' => Auth::user()->id,
+        // ]);
+
+        $course = new Course();
+        $course->name = $this->name;
+        $course->description = $this->description;
+        $course->image = $this->course_image;
+        $course->price = $this->price;
+        $course->user_id = Auth::user()->id;
+        $course->save();
 
         $course_id = $course->id;
         foreach($this->selectedDays as $day) {
@@ -66,6 +93,8 @@ public $name;
             $i++;
         }
 
+        $course->teachers()->attach($this->selectedTeachers);
+
         flash()->addSuccess('Course created successfully');
 
         return redirect()->route('course.index');
@@ -74,6 +103,8 @@ public $name;
 
     public function render()
     {
-        return view('livewire.course-create');
+        $teachers = User::Role('Teacher')->get();
+        return view('livewire.course-create',
+        ['teachers' => $teachers]);
     }
 }
