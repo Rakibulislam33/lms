@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\AdmissonController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CurriculamController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProfileController;
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice-show');
 
     Route::resource('course', CourseController::class);
+    Route::resource('class', CurriculamController::class);
+
 
 
 });

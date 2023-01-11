@@ -23,6 +23,7 @@ class CourseCreate extends Component
     public $selectedTeachers = [];
     public $time;
     public $end_date;
+    public $slug;
 
     // public $course_name;
     // public $course_image;
@@ -53,6 +54,8 @@ class CourseCreate extends Component
         'description' => 'required',
         'price' => 'required',
         'course_image'=> 'required',
+        'selectedDays' => 'required',
+        'time' => 'required'
     ];
 
 
@@ -68,6 +71,7 @@ class CourseCreate extends Component
 
         $course = new Course();
         $course->name = $this->name;
+        $course->slug = str_replace(' ', '-', $this->name);
         $course->description = $this->description;
         $course->image = $this->course_image;
         $course->price = $this->price;
@@ -86,12 +90,15 @@ class CourseCreate extends Component
                 if($date->format("l") === "Sunday"){ // Need to make Selected day Dynamic
                     $curriculum = Curriculum::create([
                         'name' => $this->name.' '.$i++,
+                        'week_day' => $day,
+                        'class_time' => $this->time,
+                        'end_date' => $this->end_date,
                         'course_id' => $course_id,
                     ]);
                 }
             }
-            $i++;
         }
+        $i++;
 
         $course->teachers()->attach($this->selectedTeachers);
 

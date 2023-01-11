@@ -20,4 +20,15 @@ class CourseShow extends Component
             'allClass' => $allClass
         ]);
     }
+
+    public function curriculamDelete($id)
+    {
+        $curriculum = Curriculum::findOrFail($id);
+
+        $curriculum->delete();
+
+        flash()->addSuccess('Curriculum deleted successfully');
+    }
+
+
 }

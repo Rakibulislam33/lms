@@ -1,5 +1,5 @@
 <div class=" justify-center">
-    <div class="rounded-sm shadow-sm bg-white pb-3">
+    <div class="rounded-sm  mx-4 shadow-sm bg-white pb-3">
         <img class="h-40" src="{{$course->image}}">
 
         <div class="mt-4">
@@ -38,7 +38,7 @@
         <p class="text-gray-600">{{$course->description}}</p>
         <h3 class="text-lg py-4">All Class List</h3>
         <div class="table w-full p-2">
-            <table class="w-full border">
+           {{--  <table class="w-full border">
                 <thead>
                 <tr class="bg-gray-50 border-b">
                     <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
@@ -82,9 +82,38 @@
                         </td>
                     </tr>
                 @endforeach
-                </tbody>
+                </tbody> --}}
             </table>
         </div>
+        <table class="w-full table-auto">
+            <tr>
+                <th class="border px-4 py-2 text-left">Name</th>
+                <th class="border px-4 py-2 text-left">Actions</th>
+            </tr>
 
+            @foreach ($allClass as $class)
+            <tr>
+                <td class="border px-4 py-2">{{$class->name}}</td>
+                <td class="border px-4 py-2">
+                    <div class="flex items-center justify-center">
+                        <a class="mr-1" href="{{route('class.edit',$class->id)}}">
+                            @include('components.icons.edit')
+                        </a>
+
+                        <a class="mr-1" href="{{route('class.show', $class->id)}}">
+                            @include('components.icons.eye')
+                        </a>
+
+                        <form class="ml-1" onsubmit="return confirm('Are you sure?');"
+                            wire:submit.prevent="curriculamDelete({{$class->id}})">
+                            <button type="submit">
+                                @include('components.icons.trash')
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+        </table>
     </div>
 </div>

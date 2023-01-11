@@ -11,6 +11,9 @@ class Curriculum extends Model
 
     protected $fillable = [
         'name',
+        'week_day',
+        'class_time',
+        'end_date',
         'course_id',
         'class_date',
         'class_day',
@@ -26,5 +29,15 @@ class Curriculum extends Model
     public function attendances() {
         return $this->hasMany(Attendance::class);
     }
+
+    public function notes() {
+        return $this->belongsToMany(Note::class, 'curriculum_note');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
 
 }

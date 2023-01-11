@@ -44,7 +44,7 @@ class Admission extends Component
         $user = User::create([
             'name' => $lead->name,
             'email' => $lead->email,
-            'password' => Str::random(8),
+            'password' => bcrypt(Str::random(8)),
         ]);
 
         $lead->delete();

@@ -24,17 +24,28 @@ class CourseEdit extends Component
     public $selectedTeachers = [];
     public $duration;
     public $end_date;
+    public $class_time;
+    public $week_day;
 
 
 
     public function mount(){
 
-        $course = Course::findOrFail($this->course_id);
+        // $course = Course::findOrFail($this->course_id);
+        $course = Course::where('id', $this->course_id)->with('curriculumns')->first();
         $this->course_name = $course->name;
         $this->course_image = $course->image;
         $this->price = $course->price;
         $this->description = $course->description;
        $this->selectedTeachers = $course->teachers()->pluck('users.id')->toArray();
+       if (!empty(count($course->curriculumns))) {
+        $this->time = $course->curriculumns[0]->class_time;
+        $this->end_date = $course->curriculumns[0]->end_date;
+
+        foreach ($course->curriculumns as $curriculumn) {
+            $this->selectedDays[] = $curriculumn->week_day;
+        }
+    }
 
     }
     protected $rules = [
@@ -43,6 +54,7 @@ class CourseEdit extends Component
         'price' => 'required',
         'description' => 'required|min:150',
         'selectedTeachers' => 'required',
+        'time' => 'required'
     ];
     public function render()
     {
@@ -51,7 +63,10 @@ class CourseEdit extends Component
     }
 
     public function courseEdit(){
-        $course = Course::findOrFail($this->course_id);
+        // $course = Course::findOrFail($this->course_id);
+        $this->validate();
+
+        $course = Course::where('id', $this->course_id)->with('curriculumns')->first();
         $course->name = $this->course_name;
         $course->description = $this->description;
         $course->image = $this->course_image;
@@ -74,6 +89,8 @@ class CourseEdit extends Component
                         $eClass = new Curriculum();
                         $eClass->number = $classNum;
                         $eClass->class_date = $date;
+                        $eClass->class_time = $this->time;
+                        $eClass->end_date = $this->end_date;
                         $eClass->class_duration = $this->duration;
                         $eClass->course_id = $course->id;
                         $eClass->save();

@@ -18,7 +18,7 @@
             <td class="border px-4 py-2">{{ $course->name }}</td>
             <td class="w-32 mx-auto border px-4 py-2"><img src="{{ $course->image }}" alt="{{ $course->name }}"></td>
             <td class="border px-4 py-2">{{ $course->description }}</td>
-            <td class="border px-4 py-2">$ {{ $course->price }}</td>
+            <td class="border w-9 px-4 py-2">$ {{ $course->price }}</td>
             <td class="border px-4 ">
                 <div class="flex flex-wrap gap-4">
                     @foreach($course->teachers as $teacher)
